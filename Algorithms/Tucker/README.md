@@ -1,5 +1,16 @@
 # Tucker's Algorithm — Euler
 
+## Algorithm Explanation
+
+Tucker’s Algorithm is an $O(V + E)$ algorithm that constructs an Eulerian circuit in an undirected graph by breaking the graph into smaller sub-cycles and local-swapping them together.
+
+Instead of relying on recursive stack operations (like Hierholzer's) or global bridge-checking (like Fleury's), it works through four simple steps:
+
+1. **Local Edge Pairing:** At every vertex $v$, group its incident edges into arbitrary pairs.
+2. **Cycle Decomposition:** Following these paired links partitions the entire edge set into a collection of disjoint, closed sub-cycles.
+3. **Cycle Merging (Local Swaps):** Wherever two different sub-cycles intersect at a vertex $v$, swap their edge-pairing connections at $v$. This local swap joins the two sub-cycles into a single larger cycle.
+4. **Final Tour Extraction:** Repeat these local swaps across all intersecting vertices until all sub-cycles merge into one single unified cycle, which forms the final Eulerian circuit.
+
 ## Prerequisites to Run the Code
 
 - **Python**: Python 3.8+ (tested on Python 3.12).
@@ -8,6 +19,8 @@
 ---
 
 ## Instructions to Run the Code
+
+**_Sample cases based on https://cses.fi/problemset/task/1691_**
 
 ### A. Run with Sample Input File
 Execute Tyler's algorithm on the provided sample input file (`input_sample.txt`):
@@ -47,6 +60,8 @@ python tucker.py --random 8
 ---
 
 ## Result of Sample Run
+
+**_Sample cases based on https://cses.fi/problemset/task/1691_**
 
 ### Baseline Run Output (Verbatim Terminal Output)
 Executed command: `python tucker.py --file input_sample.txt`
@@ -90,6 +105,8 @@ Execution Time: 0.0006 seconds
 ```
 
 **Note on the trace format:** Unlike Fleury's Algorithm, Tucker's Algorithm does not perform expensive global bridge checks (O(E^2)). Instead, it operates entirely via local edge pairings, decomposing the graph into initial 2-regular sub-cycles and iteratively performing local edge-swaps at shared vertices. This reduces total execution time to O(V+E) linear time, making it fully optimal for CSES Task 1691 constraints (M ≤ 200,000).
+
+<img width="1512" height="816" alt="Screenshot 2026-09-22 at 1 21 22 PM" src="https://github.com/user-attachments/assets/7b6d5919-aacd-436a-b8f8-e17d5a4771e0" />
 
 ---
 
