@@ -1,9 +1,9 @@
-# Tucker's Algorithm — Euler & Fail Cases
+# Tucker's Algorithm — Euler
 
 ## Prerequisites to Run the Code
 
 - **Python**: Python 3.8+ (tested on Python 3.12).
-- **Dependencies**: **None** (Pure Python standard library: `argparse`, `random`).
+- **Dependencies**: **None** (Pure Python standard library: `sys`, `collections`, `argparse`, `random`).
 
 ---
 
@@ -12,36 +12,36 @@
 ### A. Run with Sample Input File
 Execute Tyler's algorithm on the provided sample input file (`input_sample.txt`):
 ```bash
-python tyler.py --file input_sample.txt --start A
+python tucker.py --file input_sample.txt
 ```
 
 ### B. Run Complete Automated Benchmark Suite
-....
+Runs Tucker's algorithm against dynamic failure adaptation scenarios and boundary checks:
 ```bash
-python implementation.py --file input_sample.txt --start A --suite
+python tucker.py --file input_sample.txt --suite
 ```
 
 ### C. Simulate Specific Edge or Node Failures
 ```bash
-# Simulate failure of a specific link (e.g. edge G-F severed):
-python implementation.py --file input_sample.txt --start A --fail-edges G-F
+# Simulate failure due to an odd degree vertex (e.g., node 3 degree imbalance):
+python tucker.py --file input_sample.txt --fail-odd 3
 
-# Simulate failure of a specific node (e.g. node C destroyed):
-python implementation.py --file input_sample.txt --start A --fail-nodes C
+# Simulate failure due to a disconnected graph component:
+python tucker.py --file input_sample.txt --fail-disconnected
 
-# Simulate concurrent failures:
-python implementation.py --file input_sample.txt --start A --fail-nodes C --fail-edges G-F
+# Simulate failure due to starting node isolation (Post Office / Node 1 disconnected):
+python tucker.py --file input_sample.txt --fail-isolate-1
 ```
 
 ### D. Enter Custom Graph Interactively
 ```bash
-python implementation.py --input
-# Enter edges like "A B 7" (one per line). Press Enter on an empty line when finished.
+python tucker.py --input
+# Enter n and m on line 1, followed by m edges "u v" (one per line). Press Enter when finished.
 ```
 
 ### E. Generate and Test Random Connected Graph
 ```bash
-python implementation.py --random 8
+python tucker.py --random 8
 ```
 
 ---
@@ -49,110 +49,55 @@ python implementation.py --random 8
 ## Result of Sample Run
 
 ### Baseline Run Output (Verbatim Terminal Output)
-Executed command: `python implementation.py --file input_sample.txt --start A`
+Executed command: `python tucker.py --file input_sample.txt`
 
 ```text
-================================================================================
-LOADED CUSTOM GRAPH FROM FILE (7 Nodes, 12 Edges)
-================================================================================
---------------------------------------------------------------------------------------------
-Step  Edge        Weight   Status          Reason
---------------------------------------------------------------------------------------------
-1     (A, G)      5        [+] ACCEPTED
-      -> Minimum-weight edge crossing the cut (tree=['A'] | rest). Frontier considered: (A-B: 7), (A-C: 6), (A-G: 5), (A-F: 10)
-2     (A, C)      6        [+] ACCEPTED
-      -> Minimum-weight edge crossing the cut (tree=['A', 'G'] | rest). Frontier considered: (A-B: 7), (A-C: 6), (A-F: 10), (G-F: 6)
-3     (C, B)      5        [+] ACCEPTED
-      -> Minimum-weight edge crossing the cut (tree=['A', 'C', 'G'] | rest). Frontier considered: (A-B: 7), (A-F: 10), (C-B: 5), (C-E: 7), (C-F: 9), (G-F: 6)
-4     (G, F)      6        [+] ACCEPTED
-      -> Minimum-weight edge crossing the cut (tree=['A', 'B', 'C', 'G'] | rest). Frontier considered: (A-F: 10), (B-D: 7), (B-E: 9), (C-E: 7), (C-F: 9), (G-F: 6)
-5     (F, E)      5        [+] ACCEPTED
-      -> Minimum-weight edge crossing the cut (tree=['A', 'B', 'C', 'F', 'G'] | rest). Frontier considered: (B-D: 7), (B-E: 9), (C-E: 7), (F-E: 5)
-6     (E, D)      5        [+] ACCEPTED
-      -> Minimum-weight edge crossing the cut (tree=['A', 'B', 'C', 'E', 'F', 'G'] | rest). Frontier considered: (B-D: 7), (E-D: 5)
---------------------------------------------------------------------------------------------
-MST Edges Selected: [A-G (w=5), A-C (w=6), C-B (w=5), G-F (w=6), F-E (w=5), E-D (w=5)]
-Total MST Weight: 32
+Executed command: python tucker.py --file input_sample.txt
+====================================================================================================
+LOADED GRAPH FROM FILE (6 Crossings, 8 Streets) — START NODE: 1
+====================================================================================================
+Phase 1: Arbitrary Local Edge Pairing
+----------------------------------------------------------------------------------------------------
+  * Crossing 1: Paired e1(1-2) <-> e2(1-3)
+  * Crossing 2: Paired e1(1-2) <-> e3(2-3)  |  Paired e4(2-4) <-> e5(2-6)
+  * Crossing 3: Paired e2(1-3) <-> e3(2-3)  |  Paired e6(3-5) <-> e7(3-6)
+  * Crossing 4: Paired e4(2-4) <-> e8(4-5)
+  * Crossing 5: Paired e6(3-5) <-> e8(4-5)
+  * Crossing 6: Paired e5(2-6) <-> e7(3-6)
+
+Phase 2: Disjoint Sub-Cycle Decomposition
+----------------------------------------------------------------------------------------------------
+  * Cycle 0 (Component 0): e1(1-2) -> e3(2-3) -> e2(3-1)
+    [Sub-tour Path: 1 -> 2 -> 3 -> 1]
+  * Cycle 1 (Component 1): e4(2-4) -> e8(4-5) -> e6(5-3) -> e7(3-6) -> e5(6-2)
+    [Sub-tour Path: 2 -> 4 -> 5 -> 3 -> 6 -> 2]
+
+Phase 3: Cycle Merging via Local Pairing Swaps
+----------------------------------------------------------------------------------------------------
+Step  Crossing  Intersecting Cycles  Swap Operation performed                            Status
+----------------------------------------------------------------------------------------------------
+1     2         Cycle 0 & Cycle 1    Old Pairs: (e1-e3), (e4-e5)                         [+] MERGED
+                                     New Pairs: (e1-e5), (e4-e3)
+                                     -> Cycle 0 and Cycle 1 joined into unified component.
+
+Phase 4: Final Circuit Traversal Walk
+----------------------------------------------------------------------------------------------------
+Starting at Post Office (Crossing 1):
+  1 -(e1)-> 2 -(e5)-> 6 -(e7)-> 3 -(e6)-> 5 -(e8)-> 4 -(e4)-> 2 -(e3)-> 3 -(e2)-> 1
+----------------------------------------------------------------------------------------------------
+Eulerian Circuit Output: 1 2 6 3 5 4 2 3 1
+Execution Time: 0.0006 seconds
 ```
 
-**Note on the trace format:** unlike Kruskal's algorithm, Prim's does not need
-a per-edge cycle check across the whole edge list. At every step it only
-looks at the current **cut** (the edges crossing between the tree so far
-and the remaining vertices) and takes the cheapest one — that edge can
-never form a cycle, by the Cut Property. This is why the table above has
-exactly 6 rows (`V - 1 = 7 - 1 = 6`) instead of listing all 12 edges: each
-row already represents an accepted edge, with the full frontier it beat
-shown in the reason column for transparency.
-
-### Fail Adaptation
-
-#### Scenario 1: Critical Link Failure (Edge (G, F) severed)
-```text
-================================================================================
-  ADAPTATION REPORT: G-F SEVERED
-================================================================================
-Failed Nodes : None
-Failed Edges : [('G', 'F')]
-Active Nodes : 7 (A, B, C, D, E, F, G)
-
---- Quantitative Impact ---
-Baseline MST Cost : 32 (Edges: 6)
-Adapted Graph Cost: 33 (Edges: 6)
-Cost Difference   : +1
-
---- Structural Comparison ---
-Retained Baseline Edges (5): [A-G: 5, A-C: 6, C-B: 5, D-E: 5, E-F: 5]
-Added Replacement Edges (1): [B-D: 7]
-Removed / Lost Edges    (1): [G-F: 6]
-
---- Algorithmic Adaptation Mechanism ---
-Status: [SUCCESS] Fully connected Minimum Spanning Tree preserved.
-- The cut previously bridged by (G, F) had to be reconnected through a new frontier edge.
-- Prim's algorithm re-scanned the frontier and found (B, D) with weight 7 as the new minimum crossing edge.
-- Total adapted cost across active nodes is 33.
-================================================================================
-```
-
-#### Scenario 2: Junction Node Failure (Hub Node C destroyed)
-```text
-================================================================================
-  ADAPTATION REPORT: NODE C DESTROYED
-================================================================================
-Failed Nodes : ['C']
-Failed Edges : None
-Active Nodes : 6 (A, B, D, E, F, G)
-
---- Quantitative Impact ---
-Baseline MST Cost : 32 (Edges: 6)
-Adapted Graph Cost: 28 (Edges: 5)
-Cost Difference   : -4
-
---- Structural Comparison ---
-Retained Baseline Edges (4): [A-G: 5, G-F: 6, F-E: 5, E-D: 5]
-Added Replacement Edges (1): [A-B: 7]
-Removed / Lost Edges    (2): [A-C: 6, C-B: 5]
-
---- Algorithmic Adaptation Mechanism ---
-Status: [SUCCESS] Fully connected Minimum Spanning Tree preserved.
-- All 4 edges incident to 'C' were removed from consideration.
-- Prim's algorithm re-scanned the frontier and found (A, B) with weight 7 as the new minimum crossing edge.
-- Total adapted cost across active nodes is 28.
-================================================================================
-```
-
-**Cross-check with Kruskal's results:** both algorithms report identical
-adapted costs (33 for the G-F edge failure, 28 for the node-C failure).
-This is expected — a minimum spanning tree's *total weight* is the same
-no matter which correct MST algorithm produces it, even when the specific
-edges chosen along the way differ.
+**Note on the trace format:** Unlike Fleury's Algorithm, Tucker's Algorithm does not perform expensive global bridge checks (O(E^2)). Instead, it operates entirely via local edge pairings, decomposing the graph into initial 2-regular sub-cycles and iteratively performing local edge-swaps at shared vertices. This reduces total execution time to O(V+E) linear time, making it fully optimal for CSES Task 1691 constraints (M ≤ 200,000).
 
 ---
 
 ## AI Tools Usage Disclosure
 
 In compliance with Institut Teknologi Sepuluh Nopember academic honesty guidelines for group coursework:
-- **AI Model / Assistant Used**: Claude
+- **AI Model / Assistant Used**: Google Gemini
 - **Scope of AI Assistance**:
-  1. Assisted in writing the frontier/cut-based trace logic for Prim's algorithm.
-  2. Formatted step-by-step execution traces and adaptation reports to match the group's Kruskal report style.
+  1. Assisted in writing the python program for Tucker's algorithm.
+  2. Formatted step-by-step execution traces and adaptation reports to match the group's signature report style.
 - **Verification & Ownership**: All source code, algorithm traces, and mathematical explanations have been reviewed, verified, and tested by the group members.
