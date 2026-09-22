@@ -12,8 +12,6 @@
 
 </div>
 
-### PDF Reports: https://docs.google.com/document/d/1-2w2EMhnmUNjq3F3008iwsd6wK5erb4S_Uz3BmBnUeM/edit?usp=sharing
-
 ## Algorithm Explanation
 
 ### Euler Path and Euler Circuit
@@ -63,3 +61,6 @@ __Steps__
 4. Continue selecting unused edges while maintaining the Euler path conditions.
 5. Repeat until every edge has been used.
 6. The resulting sequence of vertices represents the Euler path or Euler circuit.
+
+## Extras
+### PDF Reports: https://docs.google.com/document/d/1-2w2EMhnmUNjq3F3008iwsd6wK5erb4S_Uz3BmBnUeM/edit?usp=sharing
