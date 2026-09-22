@@ -23,36 +23,36 @@ Sample cases based on [https://cses.fi/problemset/task/1691](https://cses.fi/pro
 ### A. Run with Sample Input File
 Execute Fleury's algorithm on the provided sample input file (`input_sample.txt`):
 ```bash
-python mail_delivery.py --file input_sample.txt
+python fluery.py --file input_sample.txt
 ```
 
 ### B. Run Complete Automated Benchmark Suite
 Runs Fleury's algorithm against dynamic failure adaptation scenarios and boundary checks:
 ```bash
-python mail_delivery.py --file input_sample.txt --suite
+python fluery.py --file input_sample.txt --suite
 ```
 
 ### C. Simulate Specific Edge or Node Failures
 ```bash
 # Simulate failure due to an odd degree vertex (e.g., node 3 degree imbalance):
-python mail_delivery.py --file input_sample.txt --fail-odd 3
+python fluery.py --file input_sample.txt --fail-odd 3
 
 # Simulate failure due to a disconnected graph component:
-python mail_delivery.py --file input_sample.txt --fail-disconnected
+python fluery.py --file input_sample.txt --fail-disconnected
 
 # Simulate failure due to starting node isolation (Post Office / Node 1 disconnected):
-python mail_delivery.py --file input_sample.txt --fail-isolate-1
+python fluery.py --file input_sample.txt --fail-isolate-1
 ```
 
 ### D. Enter Custom Graph Interactively
 ```bash
-python mail_delivery.py --input
+python fluery.py --input
 # Enter n and m on line 1, followed by m edges "u v" (one per line). Press Enter when finished.
 ```
 
 ### E. Generate and Test Random Connected Graph
 ```bash
-python mail_delivery.py --random 8
+python fluery.py --random 8
 ```
 
 ---
@@ -62,7 +62,7 @@ Sample cases based on [https://cses.fi/problemset/task/1691](https://cses.fi/pro
 
 ### Baseline Run Output (Verbatim Terminal Output)
 ```text
-Executed command: python mail_delivery.py --file input_sample.txt
+Executed command: python fluery.py --file input_sample.txt
 ====================================================================================================
 LOADED GRAPH FROM FILE (6 Crossings, 8 Streets) — START NODE: 1
 ====================================================================================================
@@ -106,8 +106,8 @@ Execution Time: 0.0013 seconds
 
 ## AI Tools Usage Disclosure
 In compliance with Institut Teknologi Sepuluh Nopember academic honesty guidelines for group coursework:
-* **AI Model / Assistant Used:** Google Gemini
+* **AI Model / Assistant Used:** Claude
 * **Scope of AI Assistance:**
-  * Assisted in structuring and implementing Fleury's algorithm in `mail_delivery.py`.
+  * Assisted in structuring and implementing Fleury's algorithm in `fluery.py`.
   * Formatted the step-by-step execution trace, command-line arguments (`--suite`, `--fail-odd`, etc.), and verbatim report logs to match the group's signature documentation format.
 * **Verification & Ownership:** All source code, algorithm traces, and mathematical explanations have been reviewed, verified, and tested by the group members.
