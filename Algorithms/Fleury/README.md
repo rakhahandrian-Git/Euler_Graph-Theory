@@ -60,6 +60,9 @@ python fluery.py --random 8
 ## Result of Sample Run
 Sample cases based on [https://cses.fi/problemset/task/1691](https://cses.fi/problemset/task/1691)
 
+<img width="1517" height="813" alt="image" src="https://github.com/user-attachments/assets/f9a3f317-eb0c-4d68-9b55-b019894f2902" />
+
+
 ### Baseline Run Output (Verbatim Terminal Output)
 ```text
 Executed command: python fluery.py --file input_sample.txt
