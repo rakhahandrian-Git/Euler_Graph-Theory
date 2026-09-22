@@ -1,4 +1,4 @@
-# Tyler's Algorithm — Euler & Fail Cases
+# Tucker's Algorithm — Euler & Fail Cases
 
 ## Prerequisites to Run the Code
 
