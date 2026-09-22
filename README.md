@@ -70,7 +70,7 @@ __Steps__
 
     AI was (mostly) used to generate the step by step visualizations and verify the steps; given the input and steps
 
-    "so from the code, what is the time and space complexity for the fleury and hierholzer code"
+    "so from the code, what is the time and space complexity for the fleury ,hierholzer and tucker code"
 
     "create the visualization for each step of the graph"
 
