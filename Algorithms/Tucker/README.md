@@ -11,6 +11,8 @@ Instead of relying on recursive stack operations (like Hierholzer's) or global b
 3. **Cycle Merging (Local Swaps):** Wherever two different sub-cycles intersect at a vertex $v$, swap their edge-pairing connections at $v$. This local swap joins the two sub-cycles into a single larger cycle.
 4. **Final Tour Extraction:** Repeat these local swaps across all intersecting vertices until all sub-cycles merge into one single unified cycle, which forms the final Eulerian circuit.
 
+---
+
 ## Prerequisites to Run the Code
 
 - **Python**: Python 3.8+ (tested on Python 3.12).
