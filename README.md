@@ -72,4 +72,6 @@ __Steps__
 
     so from the code, what is the time and space complexity for the fleury and hierholzer code
 
+    create the visualization for each step of the graph
+
 
