@@ -64,3 +64,10 @@ __Steps__
 
 ## Extras
 ### PDF Reports: https://docs.google.com/document/d/1-2w2EMhnmUNjq3F3008iwsd6wK5erb4S_Uz3BmBnUeM/edit?usp=sharing
+
+## AI Prompt used
+<img width="410" height="322" alt="image" src="https://github.com/user-attachments/assets/f2ad2e26-152d-43ad-90e1-860d2f67c3d2" />
+
+AI was (mostly) used to generate the step by step visualizations and verify the steps; given the input and steps
+
+
